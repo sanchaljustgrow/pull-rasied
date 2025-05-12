@@ -1,7 +1,7 @@
 name: Checkstyle and PMD Analysis
 on:
   pull_request:
-    branches: [pmd_debug] # Changed branch name to pmd_debug
+    branches: dev # Changed branch name to pmd_debug
   push:
     branches: [main] # Changed branch name to main
 

@@ -1,12 +1,12 @@
 package com.example.demo;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-class DemoApplicationTests {
-    @Test
-    void testSum() {
-        DemoApplication.CalculationClass calc = new DemoApplication().new CalculationClass();
-        assertEquals(30, calc.calculateSum(10, 20));
+@SpringBootApplication
+public class DemoApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+        System.out.println("Hello, world!");
     }
 }

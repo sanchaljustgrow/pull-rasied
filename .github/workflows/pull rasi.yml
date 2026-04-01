@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [ pmd_debug ]
   push:
-    branches: [ main ]
+    branches: [ m ]
 
 jobs:
   lint:

@@ -23,11 +23,13 @@
     </properties>
 
     <dependencies>
+        <!-- Core Spring Boot Web Starter -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!-- Hot reload during development -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
@@ -35,6 +37,7 @@
             <optional>true</optional>
         </dependency>
 
+        <!-- Testing support -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -44,10 +47,11 @@
 
     <build>
         <plugins>
+            <!-- Updated PMD plugin to avoid ASM incompatibility -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.15.0</version>
+                <version>3.21.0</version>
                 <executions>
                     <execution>
                         <phase>verify</phase>
@@ -57,7 +61,6 @@
                     </execution>
                 </executions>
                 <configuration>
-                   
                     <verbose>true</verbose>
                     <reportFormat>html</reportFormat>
                     <outputDirectory>${project.build.directory}/pmd</outputDirectory>

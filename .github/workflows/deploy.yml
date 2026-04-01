@@ -9,22 +9,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout code
+      # Checkout code
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Setup Java
+      # Setup Java
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      # 3. Build Maven project
+      # Build Maven project
       - name: Build with Maven
         run: mvn clean package -DskipTests
 
-      # 4. Copy JAR to EC2
+      # Copy JAR to EC2
       - name: Copy JAR to EC2
         uses: appleboy/scp-action@master
         with:
@@ -35,7 +35,7 @@ jobs:
           source: "target/*.jar"
           target: "/home/ubuntu/"
 
-      # 5. Deploy on EC2
+      # Deploy on EC2
       - name: Deploy on EC2
         uses: appleboy/ssh-action@master
         with:
@@ -47,9 +47,9 @@ jobs:
           command_timeout: 10m
           script: |
             echo "Stopping existing application..."
-            pkill -f 'java -jar' || true
+            pkill -f 'java -jar' || echo "No running app found"
 
-            echo "Starting new application..."
+            echo "Starting application..."
             nohup java -jar /home/ubuntu/*.jar > app.log 2>&1 &
 
-            echo "Deployment completed successfully!"
+            echo "Deployment completed successfully"

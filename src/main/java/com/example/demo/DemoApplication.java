@@ -29,7 +29,7 @@ public class DemoApplication {
                 // e.g., new FileReader(filename);
             } catch (Exception e) {
                 System.err.println("Failed to read file: " + filename);
-                e.printStackTrace(); // Proper logging instead of ignoring
+                e.printStackTrace();
             }
         }
     }

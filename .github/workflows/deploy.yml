@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "main" ]
 
-jobs: 
+jobs:
   deploy:
     runs-on: ubuntu-latest
 
@@ -29,7 +29,7 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           port: ${{ secrets.EC2_PORT }}
           source: "target/*.jar"
-          target: "/home/ec2-user/app.jar"
+          target: "/home/ec2-user/"
 
       - name: Deploy on EC2
         uses: appleboy/ssh-action@master
@@ -40,4 +40,4 @@ jobs:
           port: ${{ secrets.EC2_PORT }}
           script: |
             pkill -f 'java -jar' || true
-            nohup java -jar /home/ec2-user/app.jar > app.log 2>&1 &
+            nohup java -jar /home/ec2-user/*.jar > app.log 2>&1 &

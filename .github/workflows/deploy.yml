@@ -1,0 +1,58 @@
+name: Deploy Simple Java Backend
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2️⃣ Setup Java
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      # 3️⃣ Compile Java file
+      - name: Compile Java
+        run: javac SimpleServer.java
+
+      # 4️⃣ Copy files to EC2
+      - name: Copy files to EC2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          source: "SimpleServer.java"
+          target: "/home/ubuntu/java-backend"
+
+      # 5️⃣ Run backend on EC2
+      - name: Run Java Backend on EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            sudo apt update
+            sudo apt install -y openjdk-17-jdk
+
+            cd /home/ubuntu/java-backend
+
+            # Compile again to be safe
+            javac SimpleServer.java
+
+            # Stop old process
+            pkill -f SimpleServer || true
+
+            # Run in background
+            nohup java SimpleServer > backend.log 2>&1 &

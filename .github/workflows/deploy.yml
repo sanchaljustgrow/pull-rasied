@@ -19,6 +19,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: maven
 
       # Build Maven project
       - name: Build with Maven
@@ -33,7 +34,7 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           port: ${{ secrets.EC2_PORT }}
           source: "target/*.jar"
-          target: "/home/ubuntu/"
+          target: "/home/ubuntu/app.jar"
 
       # Deploy on EC2
       - name: Deploy on EC2
@@ -47,9 +48,20 @@ jobs:
           command_timeout: 10m
           script: |
             echo "Stopping existing application..."
-            pkill -f 'java -jar' || true
+            pkill -f 'java -jar /home/ubuntu/app.jar' || true
 
             echo "Starting application..."
-            nohup java -jar /home/ubuntu/*.jar > app.log 2>&1 &
+            nohup java -jar /home/ubuntu/app.jar > /home/ubuntu/app.log 2>&1 &
 
             echo "Deployment completed successfully"
+
+      # Health check
+      - name: Verify application is running
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          port: ${{ secrets.EC2_PORT }}
+          script: |
+            curl -s http://localhost:8080/ || echo "App not responding yet"

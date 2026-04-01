@@ -25,7 +25,7 @@ jobs:
       - name: Build with Maven
         run: mvn clean package -DskipTests
 
-      # Copy JAR to EC2 (rename to app.jar explicitly)
+      # Copy JAR to EC2 (rename explicitly to app.jar)
       - name: Copy JAR to EC2
         uses: appleboy/scp-action@master
         with:
@@ -34,7 +34,7 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           port: ${{ secrets.EC2_PORT }}
           source: "target/demo-0.0.1-SNAPSHOT.jar"
-          target: "/home/ubuntu/"
+          target: "/home/ubuntu/app.jar"
           overwrite: true
 
       # Deploy on EC2
@@ -49,10 +49,10 @@ jobs:
           command_timeout: 10m
           script: |
             echo "Stopping existing application..."
-            pkill -f 'java -jar /home/ubuntu/demo-0.0.1-SNAPSHOT.jar' || true
+            pkill -f 'java -jar /home/ubuntu/app.jar' || true
 
             echo "Starting application..."
-            nohup java -jar /home/ubuntu/demo-0.0.1-SNAPSHOT.jar > /home/ubuntu/app.log 2>&1 &
+            nohup java -jar /home/ubuntu/app.jar > /home/ubuntu/app.log 2>&1 &
 
             echo "Deployment completed successfully"
 

@@ -56,13 +56,13 @@ jobs:
 
             echo "Deployment completed successfully"
 
-      # # Health check
-      # - name: Verify application is running
-      #   uses: appleboy/ssh-action@master
-      #   with:
-      #     host: ${{ secrets.EC2_HOST }}
-      #     username: ${{ secrets.EC2_USER }}
-      #     key: ${{ secrets.EC2_KEY }}
-      #     port: ${{ secrets.EC2_PORT }}
-      #     script: |
-      #       curl -s http://localhost:8080/ || echo "App not responding yet"
+      # Health check
+      - name: Verify application is running
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          port: ${{ secrets.EC2_PORT }}
+          script: |
+            curl -s http://localhost:8080/ || echo "App not responding yet"

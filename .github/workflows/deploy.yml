@@ -40,4 +40,4 @@ jobs:
           port: ${{ secrets.EC2_PORT }}
           script: |
             pkill -f 'java -jar' || true
-            nohup java -jar /home/ec2-user/*.jar > app.log 2>&1 &
+            nohup java -jar /home/ubuntu/*.jar > app.log 2>&1 &

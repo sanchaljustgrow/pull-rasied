@@ -3,7 +3,7 @@ name: Deploy Simple Java Backend
 on:
   push:
     branches:
-      - main
+      - mai
 
 jobs:
   deploy:
